@@ -23,7 +23,7 @@ void vApplicationIdleHook( void )
 // Task 1 정의
 void vTask1( void *pvParameters )
 {
-	const char *pcTaskName = "Task 1 is running\r\n";
+	const char *pcTaskName = "zzzzzzz\r\n";
 
 	for( ;; )
 	{
@@ -34,12 +34,12 @@ void vTask1( void *pvParameters )
 // Task 2 정의
 void vTask2( void *pvParameters )
 {
-	const char *pcTaskName = "Task 2 is running\r\n";
+	const char *pcTaskName = "알람! 알람! 알람!\r\n";
 
 	for( ;; )
 	{
 		console_print( pcTaskName );
-        vTaskDelay( 1000 );
+        vTaskDelay( 5000 );
 	}
 }
 
@@ -48,7 +48,7 @@ int main( void )
     console_init(); 
 
 	xTaskCreate( vTask1, "Task 1", configMINIMAL_STACK_SIZE, NULL, 1, NULL );
-	xTaskCreate( vTask2, "Task 2", configMINIMAL_STACK_SIZE, NULL, 1, NULL );
+	xTaskCreate( vTask2, "Task 2", configMINIMAL_STACK_SIZE, NULL, 2, NULL );
     
 	vTaskStartScheduler();
 	for( ;; );
