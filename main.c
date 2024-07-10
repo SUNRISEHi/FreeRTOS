@@ -15,6 +15,10 @@
 
 // Simulation of the CPU hardware sleeping mode
 // Idle task hook, 지우면 안됨
+
+//Task handle 이름 선언
+TaskHandle_t task3;
+
 void vApplicationIdleHook( void )
 {
     usleep( 15000 );
@@ -23,7 +27,7 @@ void vApplicationIdleHook( void )
 // Task 1 정의
 void vTask1( void *pvParameters )
 {
-	const char *pcTaskName = "Task 1 is running\r\n";
+	const char *pcTaskName = "zzzzzzz\r\n";
 
 	for( ;; )
 	{
@@ -34,22 +38,36 @@ void vTask1( void *pvParameters )
 // Task 2 정의
 void vTask2( void *pvParameters )
 {
-	const char *pcTaskName = "Task 2 is running\r\n";
+	const char *pcTaskName = "알람! 알람! 알람!\r\n";
 
 	for( ;; )
 	{
 		console_print( pcTaskName );
-        vTaskDelay( 1000 );
+        vTaskDelay( 5000 );
+		vTaskResume(task3);
+	}
+}
+// Task 3 정의
+void vTask3(void *pvParameters)
+{
+	const char*pcTaskName = "5분만...\r\n";
+	for(;;)
+	{
+		console_print( pcTaskName );
+		vTaskSuspend(task3);
 	}
 }
 
+
 int main( void )
 {
+
     console_init(); 
 
 	xTaskCreate( vTask1, "Task 1", configMINIMAL_STACK_SIZE, NULL, 1, NULL );
-	xTaskCreate( vTask2, "Task 2", configMINIMAL_STACK_SIZE, NULL, 1, NULL );
-    
+	xTaskCreate( vTask2, "Task 2", configMINIMAL_STACK_SIZE, NULL, 3, NULL );
+    xTaskCreate( vTask3, "Task 3", configMINIMAL_STACK_SIZE, NULL, 2, &task3 );
+
 	vTaskStartScheduler();
 	for( ;; );
 }
